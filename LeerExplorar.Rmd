@@ -1,5 +1,5 @@
 ---
-title: "Tutorial R: Leer Datos CSV y Explorarlos. Parte 1"
+title: "Tutorial R: Leer Datos CSV y Explorarlos. Primera Parte."
 output: html_document
 ---
 
