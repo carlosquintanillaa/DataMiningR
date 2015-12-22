@@ -1,0 +1,89 @@
+---
+title: "Tutorial R: Leer Datos CSV y Explorarlos. Parte 2."
+output: html_document
+---
+
+Importemos nuevamente la hoja HousePrices.csv y carguemos la library **ggplot2** 
+
+```{r}
+houses=read.csv("HousePrices.csv")
+library(ggplot2)
+```
+
+
+### Dos Variables
+#### Continua-Continua
+
+Scatter plots son sin duda la mejor opcion. 
+```{r}
+qplot(SqFt,Price,data=houses)
+
+```
+
+Podemos incluir un "smoother"
+```{r}
+qplot(SqFt,Price,data=houses,geom=c("point","smooth"))
+```
+
+... o colorear los puntos de acuerdo a alguna variable categorica (estos graficos ya son de 3 variables)
+
+```{r}
+qplot(SqFt,Price,data=houses,colour=Neighborhood)
+
+qplot(SqFt,Price,data=houses,colour=Brick)
+
+```
+
+#### Continua-Categorica
+
+Boxplots
+
+```{r}
+qplot(Neighborhood,Price,data=houses,geom="boxplot")
+qplot(Neighborhood,Price,data=houses,geom="boxplot",fill=Neighborhood)
+
+qplot(Neighborhood,SqFt,data=houses,geom="boxplot")
+qplot(Neighborhood,SqFt,data=houses,geom="boxplot",fill=Neighborhood)
+```
+
+Violinplots
+
+```{r}
+qplot(Neighborhood,Price,data=houses,geom="violin")
+qplot(Neighborhood,Price,data=houses,geom="violin",fill=Neighborhood)
+
+qplot(Neighborhood,SqFt,data=houses,geom="violin")
+qplot(Neighborhood,SqFt,data=houses,geom="violin",fill=Neighborhood)
+```
+
+Ahora uno que requiere una nueva funcion en **ggplot2**. Haremos un diagrama de barra en el que la altura de la barra refleje la media de **Price**
+
+```{r}
+ggplot(data=houses,aes(x=Neighborhood,y=Price))+geom_bar(stat="summary",fun.y="mean")
+ggplot(data=houses,aes(x=Neighborhood,y=Price,fill=Neighborhood))+geom_bar(stat="summary",fun.y="mean")
+
+ggplot(data=houses,aes(x=Brick,y=Price))+geom_bar(stat="summary",fun.y="mean")
+ggplot(data=houses,aes(x=Brick,y=Price,fill=Brick))+geom_bar(stat="summary",fun.y="mean")
+
+```
+
+#### Categorica-Categorica
+
+Aqui simplemente haremos un grafico de stacked bars.
+
+```{r}
+qplot(Brick,data=houses,geom="bar")
+qplot(Brick,data=houses,geom="bar",fill=Neighborhood)
+
+qplot(Neighborhood,data=houses,geom="bar")
+qplot(Neighborhood,data=houses,geom="bar",fill=Brick)
+```
+
+Una variacion en la que todas las barras suman a 1 y podemos comparar las proporciones.
+
+```{r}
+ggplot(houses, aes(x=Brick, fill=Neighborhood))+geom_bar(position="fill")
+ggplot(houses, aes(x=Neighborhood, fill=Brick))+geom_bar(position="fill")
+
+```
+
