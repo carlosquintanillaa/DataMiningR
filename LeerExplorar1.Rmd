@@ -1,0 +1,61 @@
+---
+title: "Tutorial R: Leer Datos CSV y Explorarlos. Primera Parte."
+output: html_document
+---
+
+Importemos los datos CSV que estan en la hoja HousePrices.csv. Obtener nombres de las variables en el data.frame y obtener un resumen estadistico basico.
+
+```{r}
+houses=read.csv("HousePrices.csv")
+names(houses)
+summary(houses)
+```
+
+Cargar la library **ggplot2** necesaria para hacer todos los graficos en este tutorial. Si el library no esta disponible puede instalarse usando **install.packages("ggplot2")**
+
+```{r}
+library(ggplot2)
+```
+
+### Una Sola Variable
+#### Variables Continuas
+
+Primero vamos a dibujar histogramas para las variables continuas. Primero **SqFt**
+
+```{r}
+qplot(SqFt,data=houses)
+qplot(SqFt,data=houses,geom="histogram",bins=20,fill=I("steelblue"))
+```
+
+... despues **Price**
+
+```{r}
+qplot(Price,data=houses)
+qplot(Price,data=houses,geom="histogram",bins=20,fill=I("steelblue"))
+```
+
+Ahora probemos boxplots. Primero **SqFt**
+
+```{r}
+qplot(factor(0),SqFt,data=houses,geom="boxplot",fill=I("red"))
+```
+
+... despues **Price**
+
+```{r}
+qplot(factor(0),Price,data=houses,geom="boxplot",fill=I("green"))
+```
+
+#### Variables Categoricas
+
+Barras son una de las mejores maneras de representar conteos. Primero **Brick**
+
+```{r}
+qplot(Brick,data=houses,fill=Brick)
+```
+
+... despues **Neighborhood**
+```{r}
+qplot(Neighborhood,data=houses,fill=Neighborhood)
+```
+
