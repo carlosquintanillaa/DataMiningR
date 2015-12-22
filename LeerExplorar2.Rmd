@@ -42,8 +42,8 @@ Boxplots
 qplot(Neighborhood,Price,data=houses,geom="boxplot")
 qplot(Neighborhood,Price,data=houses,geom="boxplot",fill=Neighborhood)
 
-qplot(Neighborhood,SqFt,data=houses,geom="boxplot")
-qplot(Neighborhood,SqFt,data=houses,geom="boxplot",fill=Neighborhood)
+qplot(Brick,Price,data=houses,geom="boxplot")
+qplot(Brick,Price,data=houses,geom="boxplot",fill=Brick)
 ```
 
 Violinplots
@@ -52,8 +52,8 @@ Violinplots
 qplot(Neighborhood,Price,data=houses,geom="violin")
 qplot(Neighborhood,Price,data=houses,geom="violin",fill=Neighborhood)
 
-qplot(Neighborhood,SqFt,data=houses,geom="violin")
-qplot(Neighborhood,SqFt,data=houses,geom="violin",fill=Neighborhood)
+qplot(Brick,Price,data=houses,geom="violin")
+qplot(Brick,Price,data=houses,geom="violin",fill=Brick)
 ```
 
 Ahora uno que requiere una nueva funcion en **ggplot2**. Haremos un diagrama de barra en el que la altura de la barra refleje la media de **Price**
