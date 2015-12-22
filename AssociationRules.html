@@ -65,7 +65,7 @@ img {
 
 
 <p>Leamos los datos de la hoja de datos “ropa.csv” y guardemosla en una data.frame llamada ropa. La columna <strong>tid</strong>, el # de transaccion, sera usado como row.names. Noten que esta es la columna 7.</p>
-<pre class="r"><code>ropa = read.csv(&quot;/Users/carlosquintanilla/Desktop/ropa.csv&quot;,row.names=7)
+<pre class="r"><code>ropa = read.csv(&quot;ropa.csv&quot;,row.names=7)
 ropa</code></pre>
 <pre><code>##     blouse jeans shoes shorts skirt tshirt
 ## 101      1     0     0      0     0      0
@@ -96,7 +96,7 @@ ropa</code></pre>
 ## 
 ## The following objects are masked from 'package:base':
 ## 
-##     %in%, write</code></pre>
+##     %in%, abbreviate, write</code></pre>
 <p>Convirtamos la data.frame ropa en un itemMatrix. Esta es la estructura con la que las funciones abajo pueden hallar itemsets y reglas. Imprimamosla. Hallemos estadisticos de frecuencia para los distintos items.</p>
 <pre class="r"><code>i = as(as.matrix(ropa),&quot;itemMatrix&quot;)
 i</code></pre>
@@ -109,10 +109,11 @@ i</code></pre>
 ##   0.15   0.70   0.50   0.25   0.30   0.70</code></pre>
 <p>Ahora podemos hallar itemsets con un soporte minimo</p>
 <pre class="r"><code>fsets &lt;- apriori(i,parameter=list(supp=0.2,target=&quot;frequent itemsets&quot;))</code></pre>
-<pre><code>## 
+<pre><code>## Apriori
+## 
 ## Parameter specification:
 ##  confidence minval smax arem  aval originalSupport support minlen maxlen
-##         0.8    0.1    1 none FALSE            TRUE     0.2      1     10
+##          NA    0.1    1 none FALSE            TRUE     0.2      1     10
 ##             target   ext
 ##  frequent itemsets FALSE
 ## 
@@ -120,8 +121,8 @@ i</code></pre>
 ##  filter tree heap memopt load sort verbose
 ##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
 ## 
-## apriori - find association rules with the apriori algorithm
-## version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+## Absolute minimum support count: 4 
+## 
 ## set item appearances ...[0 item(s)] done [0.00s].
 ## set transactions ...[6 item(s), 20 transaction(s)] done [0.00s].
 ## sorting and recoding items ... [5 item(s)] done [0.00s].
@@ -130,45 +131,28 @@ i</code></pre>
 ## writing ... [17 set(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].</code></pre>
 <pre class="r"><code>inspect(fsets)</code></pre>
-<pre><code>##    items    support
-## 1  {skirt}     0.30
-## 2  {shorts}    0.25
-## 3  {shoes}     0.50
-## 4  {jeans}     0.70
-## 5  {tshirt}    0.70
-## 6  {skirt,         
-##     tshirt}    0.20
-## 7  {shoes,         
-##     shorts}    0.20
-## 8  {jeans,         
-##     shorts}    0.25
-## 9  {shorts,        
-##     tshirt}    0.20
-## 10 {jeans,         
-##     shoes}     0.35
-## 11 {shoes,         
-##     tshirt}    0.50
-## 12 {jeans,         
-##     tshirt}    0.45
-## 13 {jeans,         
-##     shoes,         
-##     shorts}    0.20
-## 14 {shoes,         
-##     shorts,        
-##     tshirt}    0.20
-## 15 {jeans,         
-##     shorts,        
-##     tshirt}    0.20
-## 16 {jeans,         
-##     shoes,         
-##     tshirt}    0.35
-## 17 {jeans,         
-##     shoes,         
-##     shorts,        
-##     tshirt}    0.20</code></pre>
+<pre><code>##    items                       support
+## 1  {skirt}                     0.30   
+## 2  {shorts}                    0.25   
+## 3  {shoes}                     0.50   
+## 4  {jeans}                     0.70   
+## 5  {tshirt}                    0.70   
+## 6  {skirt,tshirt}              0.20   
+## 7  {shoes,shorts}              0.20   
+## 8  {jeans,shorts}              0.25   
+## 9  {shorts,tshirt}             0.20   
+## 10 {jeans,shoes}               0.35   
+## 11 {shoes,tshirt}              0.50   
+## 12 {jeans,tshirt}              0.45   
+## 13 {jeans,shoes,shorts}        0.20   
+## 14 {shoes,shorts,tshirt}       0.20   
+## 15 {jeans,shorts,tshirt}       0.20   
+## 16 {jeans,shoes,tshirt}        0.35   
+## 17 {jeans,shoes,shorts,tshirt} 0.20</code></pre>
 <p>Ahora hallemos algunas reglas</p>
 <pre class="r"><code>rules &lt;- apriori(i,parameter=list(supp=0.2,conf=0.5,target=&quot;rules&quot;))</code></pre>
-<pre><code>## 
+<pre><code>## Apriori
+## 
 ## Parameter specification:
 ##  confidence minval smax arem  aval originalSupport support minlen maxlen
 ##         0.5    0.1    1 none FALSE            TRUE     0.2      1     10
@@ -179,8 +163,8 @@ i</code></pre>
 ##  filter tree heap memopt load sort verbose
 ##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
 ## 
-## apriori - find association rules with the apriori algorithm
-## version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+## Absolute minimum support count: 4 
+## 
 ## set item appearances ...[0 item(s)] done [0.00s].
 ## set transactions ...[6 item(s), 20 transaction(s)] done [0.00s].
 ## sorting and recoding items ... [5 item(s)] done [0.00s].
@@ -189,97 +173,63 @@ i</code></pre>
 ## writing ... [27 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].</code></pre>
 <pre class="r"><code>inspect(rules)</code></pre>
-<pre><code>##    lhs         rhs      support confidence      lift
-## 1  {}       =&gt; {shoes}     0.50  0.5000000 1.0000000
-## 2  {}       =&gt; {jeans}     0.70  0.7000000 1.0000000
-## 3  {}       =&gt; {tshirt}    0.70  0.7000000 1.0000000
-## 4  {skirt}  =&gt; {tshirt}    0.20  0.6666667 0.9523810
-## 5  {shorts} =&gt; {shoes}     0.20  0.8000000 1.6000000
-## 6  {shorts} =&gt; {jeans}     0.25  1.0000000 1.4285714
-## 7  {shorts} =&gt; {tshirt}    0.20  0.8000000 1.1428571
-## 8  {shoes}  =&gt; {jeans}     0.35  0.7000000 1.0000000
-## 9  {jeans}  =&gt; {shoes}     0.35  0.5000000 1.0000000
-## 10 {shoes}  =&gt; {tshirt}    0.50  1.0000000 1.4285714
-## 11 {tshirt} =&gt; {shoes}     0.50  0.7142857 1.4285714
-## 12 {jeans}  =&gt; {tshirt}    0.45  0.6428571 0.9183673
-## 13 {tshirt} =&gt; {jeans}     0.45  0.6428571 0.9183673
-## 14 {shoes,                                          
-##     shorts} =&gt; {jeans}     0.20  1.0000000 1.4285714
-## 15 {jeans,                                          
-##     shorts} =&gt; {shoes}     0.20  0.8000000 1.6000000
-## 16 {jeans,                                          
-##     shoes}  =&gt; {shorts}    0.20  0.5714286 2.2857143
-## 17 {shoes,                                          
-##     shorts} =&gt; {tshirt}    0.20  1.0000000 1.4285714
-## 18 {shorts,                                         
-##     tshirt} =&gt; {shoes}     0.20  1.0000000 2.0000000
-## 19 {jeans,                                          
-##     shorts} =&gt; {tshirt}    0.20  0.8000000 1.1428571
-## 20 {shorts,                                         
-##     tshirt} =&gt; {jeans}     0.20  1.0000000 1.4285714
-## 21 {jeans,                                          
-##     shoes}  =&gt; {tshirt}    0.35  1.0000000 1.4285714
-## 22 {shoes,                                          
-##     tshirt} =&gt; {jeans}     0.35  0.7000000 1.0000000
-## 23 {jeans,                                          
-##     tshirt} =&gt; {shoes}     0.35  0.7777778 1.5555556
-## 24 {jeans,                                          
-##     shoes,                                          
-##     shorts} =&gt; {tshirt}    0.20  1.0000000 1.4285714
-## 25 {shoes,                                          
-##     shorts,                                         
-##     tshirt} =&gt; {jeans}     0.20  1.0000000 1.4285714
-## 26 {jeans,                                          
-##     shorts,                                         
-##     tshirt} =&gt; {shoes}     0.20  1.0000000 2.0000000
-## 27 {jeans,                                          
-##     shoes,                                          
-##     tshirt} =&gt; {shorts}    0.20  0.5714286 2.2857143</code></pre>
-<p>Podemos tambien limitar las reglas por precedente…</p>
+<pre><code>##    lhs                      rhs      support confidence lift     
+## 1  {}                    =&gt; {shoes}  0.50    0.5000000  1.0000000
+## 2  {}                    =&gt; {jeans}  0.70    0.7000000  1.0000000
+## 3  {}                    =&gt; {tshirt} 0.70    0.7000000  1.0000000
+## 4  {skirt}               =&gt; {tshirt} 0.20    0.6666667  0.9523810
+## 5  {shorts}              =&gt; {shoes}  0.20    0.8000000  1.6000000
+## 6  {shorts}              =&gt; {jeans}  0.25    1.0000000  1.4285714
+## 7  {shorts}              =&gt; {tshirt} 0.20    0.8000000  1.1428571
+## 8  {shoes}               =&gt; {jeans}  0.35    0.7000000  1.0000000
+## 9  {jeans}               =&gt; {shoes}  0.35    0.5000000  1.0000000
+## 10 {shoes}               =&gt; {tshirt} 0.50    1.0000000  1.4285714
+## 11 {tshirt}              =&gt; {shoes}  0.50    0.7142857  1.4285714
+## 12 {jeans}               =&gt; {tshirt} 0.45    0.6428571  0.9183673
+## 13 {tshirt}              =&gt; {jeans}  0.45    0.6428571  0.9183673
+## 14 {shoes,shorts}        =&gt; {jeans}  0.20    1.0000000  1.4285714
+## 15 {jeans,shorts}        =&gt; {shoes}  0.20    0.8000000  1.6000000
+## 16 {jeans,shoes}         =&gt; {shorts} 0.20    0.5714286  2.2857143
+## 17 {shoes,shorts}        =&gt; {tshirt} 0.20    1.0000000  1.4285714
+## 18 {shorts,tshirt}       =&gt; {shoes}  0.20    1.0000000  2.0000000
+## 19 {jeans,shorts}        =&gt; {tshirt} 0.20    0.8000000  1.1428571
+## 20 {shorts,tshirt}       =&gt; {jeans}  0.20    1.0000000  1.4285714
+## 21 {jeans,shoes}         =&gt; {tshirt} 0.35    1.0000000  1.4285714
+## 22 {shoes,tshirt}        =&gt; {jeans}  0.35    0.7000000  1.0000000
+## 23 {jeans,tshirt}        =&gt; {shoes}  0.35    0.7777778  1.5555556
+## 24 {jeans,shoes,shorts}  =&gt; {tshirt} 0.20    1.0000000  1.4285714
+## 25 {shoes,shorts,tshirt} =&gt; {jeans}  0.20    1.0000000  1.4285714
+## 26 {jeans,shorts,tshirt} =&gt; {shoes}  0.20    1.0000000  2.0000000
+## 27 {jeans,shoes,tshirt}  =&gt; {shorts} 0.20    0.5714286  2.2857143</code></pre>
+<p>Podemos tambien limitar las reglas por precedente (solo jeans por ejemplo) …</p>
 <pre class="r"><code>rulesJeansPre &lt;- subset(rules,subset= lhs %in% &quot;jeans&quot;)
 inspect(rulesJeansPre)</code></pre>
-<pre><code>##    lhs         rhs      support confidence      lift
-## 1  {jeans}  =&gt; {shoes}     0.35  0.5000000 1.0000000
-## 2  {jeans}  =&gt; {tshirt}    0.45  0.6428571 0.9183673
-## 3  {jeans,                                          
-##     shorts} =&gt; {shoes}     0.20  0.8000000 1.6000000
-## 4  {jeans,                                          
-##     shoes}  =&gt; {shorts}    0.20  0.5714286 2.2857143
-## 5  {jeans,                                          
-##     shorts} =&gt; {tshirt}    0.20  0.8000000 1.1428571
-## 6  {jeans,                                          
-##     shoes}  =&gt; {tshirt}    0.35  1.0000000 1.4285714
-## 7  {jeans,                                          
-##     tshirt} =&gt; {shoes}     0.35  0.7777778 1.5555556
-## 8  {jeans,                                          
-##     shoes,                                          
-##     shorts} =&gt; {tshirt}    0.20  1.0000000 1.4285714
-## 9  {jeans,                                          
-##     shorts,                                         
-##     tshirt} =&gt; {shoes}     0.20  1.0000000 2.0000000
-## 10 {jeans,                                          
-##     shoes,                                          
-##     tshirt} =&gt; {shorts}    0.20  0.5714286 2.2857143</code></pre>
+<pre><code>##    lhs                      rhs      support confidence lift     
+## 9  {jeans}               =&gt; {shoes}  0.35    0.5000000  1.0000000
+## 12 {jeans}               =&gt; {tshirt} 0.45    0.6428571  0.9183673
+## 15 {jeans,shorts}        =&gt; {shoes}  0.20    0.8000000  1.6000000
+## 16 {jeans,shoes}         =&gt; {shorts} 0.20    0.5714286  2.2857143
+## 19 {jeans,shorts}        =&gt; {tshirt} 0.20    0.8000000  1.1428571
+## 21 {jeans,shoes}         =&gt; {tshirt} 0.35    1.0000000  1.4285714
+## 23 {jeans,tshirt}        =&gt; {shoes}  0.35    0.7777778  1.5555556
+## 24 {jeans,shoes,shorts}  =&gt; {tshirt} 0.20    1.0000000  1.4285714
+## 26 {jeans,shorts,tshirt} =&gt; {shoes}  0.20    1.0000000  2.0000000
+## 27 {jeans,shoes,tshirt}  =&gt; {shorts} 0.20    0.5714286  2.2857143</code></pre>
 <p>…o por consecuencia.</p>
 <pre class="r"><code>rulesJeansCon &lt;- subset(rules,subset= rhs %in% &quot;jeans&quot;)
 inspect(rulesJeansCon)</code></pre>
-<pre><code>##   lhs         rhs     support confidence      lift
-## 1 {}       =&gt; {jeans}    0.70  0.7000000 1.0000000
-## 2 {shorts} =&gt; {jeans}    0.25  1.0000000 1.4285714
-## 3 {shoes}  =&gt; {jeans}    0.35  0.7000000 1.0000000
-## 4 {tshirt} =&gt; {jeans}    0.45  0.6428571 0.9183673
-## 5 {shoes,                                         
-##    shorts} =&gt; {jeans}    0.20  1.0000000 1.4285714
-## 6 {shorts,                                        
-##    tshirt} =&gt; {jeans}    0.20  1.0000000 1.4285714
-## 7 {shoes,                                         
-##    tshirt} =&gt; {jeans}    0.35  0.7000000 1.0000000
-## 8 {shoes,                                         
-##    shorts,                                        
-##    tshirt} =&gt; {jeans}    0.20  1.0000000 1.4285714</code></pre>
+<pre><code>##    lhs                      rhs     support confidence lift     
+## 2  {}                    =&gt; {jeans} 0.70    0.7000000  1.0000000
+## 6  {shorts}              =&gt; {jeans} 0.25    1.0000000  1.4285714
+## 8  {shoes}               =&gt; {jeans} 0.35    0.7000000  1.0000000
+## 13 {tshirt}              =&gt; {jeans} 0.45    0.6428571  0.9183673
+## 14 {shoes,shorts}        =&gt; {jeans} 0.20    1.0000000  1.4285714
+## 20 {shorts,tshirt}       =&gt; {jeans} 0.20    1.0000000  1.4285714
+## 22 {shoes,tshirt}        =&gt; {jeans} 0.35    0.7000000  1.0000000
+## 25 {shoes,shorts,tshirt} =&gt; {jeans} 0.20    1.0000000  1.4285714</code></pre>
 <p>Finalmente podemos exportar nuestros resultados a una hoja CSV.</p>
-<pre class="r"><code>write(rulesJeansCon,file=&quot;/Users/carlosquintanilla/Desktop/reglasJeansCon.csv&quot;,sep=&quot;;&quot;)
-write(rulesJeansPre,file=&quot;/Users/carlosquintanilla/Desktop/reglasJeansPre.csv&quot;,sep=&quot;;&quot;)</code></pre>
+<pre class="r"><code>write(rulesJeansCon,file=&quot;reglasJeansCon.csv&quot;,sep=&quot;;&quot;)
+write(rulesJeansPre,file=&quot;reglasJeansPre.csv&quot;,sep=&quot;;&quot;)</code></pre>
 
 
 </div>

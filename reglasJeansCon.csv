@@ -1,0 +1,9 @@
+"rules";"support";"confidence";"lift"
+"2";"{} => {jeans}";0.7;0.7;1
+"6";"{shorts} => {jeans}";0.25;1;1.42857142857143
+"8";"{shoes} => {jeans}";0.35;0.7;1
+"13";"{tshirt} => {jeans}";0.45;0.642857142857143;0.918367346938776
+"14";"{shoes,shorts} => {jeans}";0.2;1;1.42857142857143
+"20";"{shorts,tshirt} => {jeans}";0.2;1;1.42857142857143
+"22";"{shoes,tshirt} => {jeans}";0.35;0.7;1
+"25";"{shoes,shorts,tshirt} => {jeans}";0.2;1;1.42857142857143
