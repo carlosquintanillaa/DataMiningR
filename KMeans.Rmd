@@ -1,0 +1,52 @@
+---
+title: "Tutoriales R: K-Means"
+output: html_document
+---
+
+Leamos la hoja iris.csv con los datos de las flores de Fisher y veamos algunos estadisticos basicos. 
+
+```{r}
+iris = read.csv("iris.csv")
+summary(iris)
+```
+
+#### Pre-procesamiento. Normalizacion.
+
+La funcion **kmeans** solo toma como argumentos una matriz de numeros. Por lo tanto excluiremos del analisis la primera columna (la especie de la flor). Vamos a normalizar. 
+
+```{r}
+x=scale(iris[,-5])
+head(x)
+```
+#### Probemos k=2
+```{r}
+k2=kmeans(x,2)
+```
+Membresias
+```{r}
+k2$cluster
+```
+Centroides
+```{r}
+k2$centers
+```
+Tamano de los clusters
+```{r}
+k2$size
+```
+#### Probemos k=3
+```{r}
+k3=kmeans(x,3)
+```
+Membresias
+```{r}
+k3$cluster
+```
+Centroides
+```{r}
+k3$centers
+```
+Tamano de los clusters
+```{r}
+k3$size
+```
