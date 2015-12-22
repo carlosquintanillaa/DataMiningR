@@ -1,0 +1,55 @@
+---
+title: "Tutorial R: Association Rules"
+output: html_document
+---
+
+Leamos los datos de la hoja de datos "ropa.csv" y guardemosla en una data.frame llamada ropa. La columna **tid**, el # de transaccion, sera usado como row.names. Noten que esta es la columna 7. 
+
+```{r}
+ropa = read.csv("/Users/carlosquintanilla/Desktop/ropa.csv",row.names=7)
+ropa
+```
+
+Invoquemos la library de arules. Si no estuviera instalada. Se puede instalar usando **install.packages("arules")**. 
+
+```{r,warning=FALSE}
+library(arules)
+```
+Convirtamos la data.frame ropa en un itemMatrix. Esta es la estructura con la que las funciones abajo pueden hallar itemsets y reglas. Imprimamosla. Hallemos estadisticos de frecuencia para los distintos items.
+```{r}
+i = as(as.matrix(ropa),"itemMatrix")
+i
+```
+Hallemos estadisticos de frecuencia para los distintos items.
+```{r}
+itemFrequency(i)
+```
+Ahora podemos hallar itemsets con un soporte minimo
+
+```{r}
+fsets <- apriori(i,parameter=list(supp=0.2,target="frequent itemsets"))
+inspect(fsets)
+```
+Ahora hallemos algunas reglas
+
+```{r}
+rules <- apriori(i,parameter=list(supp=0.2,conf=0.5,target="rules"))
+inspect(rules)
+```
+Podemos tambien limitar las reglas por precedente...
+
+```{r}
+rulesJeansPre <- subset(rules,subset= lhs %in% "jeans")
+inspect(rulesJeansPre)
+```
+...o por consecuencia.
+```{r}
+rulesJeansCon <- subset(rules,subset= rhs %in% "jeans")
+inspect(rulesJeansCon)
+```
+Finalmente podemos exportar nuestros resultados a una hoja CSV.
+
+```{r}
+write(rulesJeansCon,file="/Users/carlosquintanilla/Desktop/reglasJeansCon.csv",sep=";")
+write(rulesJeansPre,file="/Users/carlosquintanilla/Desktop/reglasJeansPre.csv",sep=";")
+```
