@@ -11,7 +11,7 @@ names(houses)
 summary(houses)
 ```
 
-Cargar library **ggplot2** necesaria para hacer todos los graficos en este tutorial. Si el library no esta disponible puede instalarse usando **install.packages("ggplot2")**
+Cargar la library **ggplot2** necesaria para hacer todos los graficos en este tutorial. Si el library no esta disponible puede instalarse usando **install.packages("ggplot2")**
 
 ```{r}
 library(ggplot2)
