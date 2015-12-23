@@ -12,7 +12,7 @@ summary(iris)
 
 #### Pre-procesamiento. Normalizacion.
 
-La funcion **kmeans** solo toma como argumentos una matriz de numeros. Por lo tanto excluiremos del analisis la primera columna (la especie de la flor). Vamos a normalizar. 
+La funcion **kmeans** solo toma como argumentos una matriz de numeros. Por lo tanto excluiremos del analisis la quinta columna (la especie de la flor). Vamos a normalizar. 
 
 ```{r}
 x=scale(iris[,-5])
