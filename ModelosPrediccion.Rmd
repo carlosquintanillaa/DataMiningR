@@ -1,0 +1,53 @@
+---
+title: "ModelosPrediccion"
+output: html_document
+---
+
+Cargar library caret
+```{r}
+library(caret)
+```
+
+Leer Datos. Eliminar columna de id y columna SurfaceTotal (para evitar multicolinealidad perfecta)
+
+```{r}
+energy <- read.csv("energy.csv")
+energy = energy[,-c(2,9)]
+```
+
+Usar 10-fold cross-validation para todos los metodos que siguen
+```{r}
+ctrl <- trainControl(method="cv",number=10)
+```
+Ahora estimemos los distintos modelos. Primero Plain vanilla regression
+```{r}
+modelo1 <- train(HeatingLoad~.,data=energy, method="lm",trControl=ctrl)
+modelo1
+```
+Ahora KNN (sin preprocessing)
+```{r}
+modelo2a <-  train(HeatingLoad~.,data=energy, method="knn",trControl=ctrl)
+modelo2a
+```
+Ahora KNN (con preprocessing)
+```{r}
+modelo2b <-  train(HeatingLoad~.,data=energy, method="knn",preProcess=c("center","scale"), trControl=ctrl)
+modelo2b
+```
+Ahora KNN (con preprocessing y grid search para optimo k)
+```{r}
+knnGrid <- expand.grid(k=c(1,5,10,30,100))
+modelo2c <-  train(HeatingLoad~.,data=energy, method="knn",preProcess=c("center","scale"), tuneGrid=knnGrid,trControl=ctrl)
+modelo2c
+```
+Ahora arboles de regresion
+```{r}
+depthGrid <- expand.grid(maxdepth=c(1,2,3,4,5,10))
+modelo3 <- train(HeatingLoad~.,data=energy, method="rpart2",tuneGrid=depthGrid, trControl=ctrl)
+modelo3
+```
+Finalmente un juguete state-of-the-art: eXtreme Gradient Boosting
+```{r}
+modelo4 <- train(HeatingLoad~.,data=energy, method="xgbTree",trControl=ctrl)
+modelo4
+```
